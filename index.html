@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Amour | Selector Íntimo de Posiciones</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cormorant Garamond (Serif elegante) & Plus Jakarta Sans (Modern Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                    },
+                    colors: {
+                        obsidian: '#0c080a',
+                        velvet: '#170d12',
+                        burgundy: {
+                            800: '#3d1424',
+                            900: '#260b16',
+                        },
+                        rosegold: {
+                            300: '#f5c2b8',
+                            400: '#e69d8f',
+                            500: '#d47a6a',
+                            600: '#b55848',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos personalizados para el Dado 3D, efectos de cristal y scrollbars */
+        body {
+            background-color: #0c080a;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(88, 22, 46, 0.35) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(181, 88, 72, 0.18) 0%, transparent 45%);
+            color: #f8ecea;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism elegante */
+        .glass-panel {
+            background: rgba(26, 14, 20, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(230, 157, 143, 0.16);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(38, 17, 27, 0.85) 0%, rgba(19, 10, 14, 0.92) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(230, 157, 143, 0.22);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* Escena y Dado 3D */
+        .scene-3d {
+            width: 210px;
+            height: 210px;
+            perspective: 900px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 640px) {
+            .scene-3d {
+                width: 240px;
+                height: 240px;
+            }
+        }
+
+        .cube-3d {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 2.2s cubic-bezier(0.18, 0.89, 0.24, 1.04);
+            cursor: pointer;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            background: linear-gradient(145deg, #2d111d 0%, #16080e 100%);
+            border: 2px solid rgba(230, 157, 143, 0.35);
+            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 122, 106, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            text-align: center;
+            backface-visibility: hidden;
+            user-select: none;
+        }
+
+        /* Posicionamiento de las 6 caras (mitad de 210px = 105px; en sm mitad de 240px = 120px) */
+        .face-1 { transform: rotateY(0deg) translateZ(105px); }
+        .face-2 { transform: rotateY(90deg) translateZ(105px); }
+        .face-3 { transform: rotateY(180deg) translateZ(105px); }
+        .face-4 { transform: rotateY(-90deg) translateZ(105px); }
+        .face-5 { transform: rotateX(90deg) translateZ(105px); }
+        .face-6 { transform: rotateX(-90deg) translateZ(105px); }
+
+        @media (min-width: 640px) {
+            .face-1 { transform: rotateY(0deg) translateZ(120px); }
+            .face-2 { transform: rotateY(90deg) translateZ(120px); }
+            .face-3 { transform: rotateY(180deg) translateZ(120px); }
+            .face-4 { transform: rotateY(-90deg) translateZ(120px); }
+            .face-5 { transform: rotateX(90deg) translateZ(120px); }
+            .face-6 { transform: rotateX(-90deg) translateZ(120px); }
+        }
+
+        /* Botón principal sensual con brillo */
+        .btn-sensual {
+            background: linear-gradient(135deg, #b55848 0%, #7d2638 100%);
+            border: 1px solid rgba(245, 194, 184, 0.35);
+            box-shadow: 0 10px 25px -5px rgba(181, 88, 72, 0.45);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .btn-sensual:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 15px 30px -5px rgba(212, 122, 106, 0.6);
+            filter: brightness(1.08);
+        }
+        .btn-sensual:active:not(:disabled) {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Animación de entrada de tarjeta */
+        @keyframes cardReveal {
+            0% { opacity: 0; transform: translateY(16px) scale(0.97); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-reveal {
+            animation: cardReveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(12, 8, 10, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(212, 122, 106, 0.3);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 122, 106, 0.6);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-rosegold-500/30 selection:text-rosegold-300 flex flex-col">
+
+    <!-- Notificación Toast Flotante -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Header / Barra Superior -->
+    <header class="w-full border-b border-rosegold-400/10 bg-obsidian/80 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
+            <!-- Marca -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-rosegold-500 to-burgundy-800 flex items-center justify-center shadow-lg border border-rosegold-300/30">
+                    <svg class="w-5 h-5 text-rosegold-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-serif text-2xl font-semibold tracking-wide text-rosegold-300 leading-none">L'Amour</h1>
+                    <p class="text-[11px] uppercase tracking-[0.2em] text-rosegold-400/70 mt-0.5">Juego en Pareja</p>
+                </div>
+            </div>
+
+            <!-- Selector de Modo (Dado 3D vs Selector Completo) -->
+            <div class="order-3 sm:order-2 w-full sm:w-auto flex justify-center">
+                <div class="bg-velvet/90 p-1 rounded-full border border-rosegold-400/20 flex items-center w-full sm:w-auto shadow-inner">
+                    <button id="tab-dice" onclick="switchMode('dice')" class="flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 bg-gradient-to-r from-rosegold-600 to-burgundy-800 text-white shadow">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                        Dado 3D
+                    </button>
+                    <button id="tab-full" onclick="switchMode('full')" class="flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 text-rosegold-300/70 hover:text-white">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                        </svg>
+                        Selector Avanzado
+                    </button>
+                </div>
+            </div>
+
+            <!-- Controles Rápidos: Favoritos, Historial y Sonido -->
+            <div class="order-2 sm:order-3 flex items-center gap-2">
+                <button onclick="openDrawer('favorites')" title="Mis Favoritos" class="relative p-2.5 rounded-full bg-velvet hover:bg-burgundy-800/70 border border-rosegold-400/20 text-rosegold-300 transition">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    <span id="fav-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rosegold-500 text-[10px] font-bold text-white flex items-center justify-center">0</span>
+                </button>
+                <button onclick="openDrawer('history')" title="Historial de Sesión" class="p-2.5 rounded-full bg-velvet hover:bg-burgundy-800/70 border border-rosegold-400/20 text-rosegold-300 transition">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+                <button id="btn-sound" onclick="toggleSound()" title="Activar/Silenciar Sonido" class="p-2.5 rounded-full bg-velvet hover:bg-burgundy-800/70 border border-rosegold-400/20 text-rosegold-300 transition">
+                    <!-- Icono sonido activo -->
+                    <svg id="icon-sound-on" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    </svg>
+                    <!-- Icono silenciado -->
+                    <svg id="icon-sound-off" class="w-4 h-4 hidden text-rosegold-400/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenedor Principal -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 sm:py-10 flex flex-col items-center">
+
+        <!-- ========================================================= -->
+        <!-- MODO 1: VERSIÓN DADO 3D (6 CARAS)                         -->
+        <!-- ========================================================= -->
+        <section id="view-dice" class="w-full flex flex-col items-center transition-all duration-300">
+            <div class="text-center max-w-lg mb-6">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-burgundy-800/70 text-rosegold-300 border border-rosegold-400/20 mb-2">
+                    Azar Íntimo en 3D
+                </span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-white">El Dado del Deseo</h2>
+                <p class="text-sm text-rosegold-300/75 mt-1">Toca el dado o pulsa el botón para dejar que el destino elija vuestro próximo movimiento.</p>
+            </div>
+
+            <!-- Escenario 3D -->
+            <div class="my-6 sm:my-10 relative flex flex-col items-center justify-center">
+                <!-- Resplandor ambiental detrás del dado -->
+                <div class="absolute w-56 h-56 rounded-full bg-rosegold-500/15 blur-3xl pointer-events-none animate-pulse-slow"></div>
+                
+                <div class="scene-3d" onclick="rollDice()">
+                    <div id="dice-cube" class="cube-3d" style="transform: rotateX(-18deg) rotateY(28deg);">
+                        <!-- Las 6 caras se renderizan dinámicamente con JS -->
+                        <div class="cube-face face-1" id="cube-face-0"></div>
+                        <div class="cube-face face-2" id="cube-face-1"></div>
+                        <div class="cube-face face-3" id="cube-face-2"></div>
+                        <div class="cube-face face-4" id="cube-face-3"></div>
+                        <div class="cube-face face-5" id="cube-face-4"></div>
+                        <div class="cube-face face-6" id="cube-face-5"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción del Dado -->
+            <div class="flex flex-wrap items-center justify-center gap-3 mt-4 mb-8">
+                <button id="btn-roll-dice" onclick="rollDice()" class="btn-sensual px-8 py-3.5 rounded-full text-white font-semibold tracking-wide flex items-center gap-2.5 text-base cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span>Lanzar Dado</span>
+                </button>
+
+                <button onclick="openDiceEditor()" class="px-5 py-3.5 rounded-full bg-velvet hover:bg-burgundy-800/80 border border-rosegold-400/25 text-rosegold-300 text-sm font-medium flex items-center gap-2 transition cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    <span>Personalizar Caras</span>
+                </button>
+            </div>
+
+            <!-- Tarjeta de Resultado del Dado -->
+            <div id="dice-result-container" class="w-full max-w-2xl"></div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- MODO 2: VERSIÓN COMPLETA (SELECTOR AVANZADO / RULETA)     -->
+        <!-- ========================================================= -->
+        <section id="view-full" class="w-full hidden flex-col items-center transition-all duration-300">
+            <div class="text-center max-w-xl mb-6">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-burgundy-800/70 text-rosegold-300 border border-rosegold-400/20 mb-2">
+                    24 Posiciones Seleccionadas
+                </span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-white">Ruleta de Pasión</h2>
+                <p class="text-sm text-rosegold-300/75 mt-1">Configura el ambiente, filtra por intensidad o lugar y déjate sorprender.</p>
+            </div>
+
+            <!-- Panel de Filtros y Opciones -->
+            <div class="glass-panel w-full max-w-2xl rounded-3xl p-5 sm:p-6 mb-7">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <!-- Filtro Intensidad -->
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-rosegold-400 font-semibold mb-2.5">
+                            Nivel de Intensidad
+                        </label>
+                        <div class="flex flex-wrap gap-2" id="filter-intensity">
+                            <button data-val="all" onclick="setFilter('intensity', 'all')" class="filter-btn active px-3 py-1.5 rounded-xl text-xs font-medium border transition cursor-pointer bg-rosegold-600/30 border-rosegold-400 text-white">
+                                Todas
+                            </button>
+                            <button data-val="Suave / Romántico" onclick="setFilter('intensity', 'Suave / Romántico')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-rosegold-400/20 bg-obsidian/50 text-rosegold-300/80 hover:border-rosegold-400/50 transition cursor-pointer">
+                                🌸 Suave / Romántico
+                            </button>
+                            <button data-val="Intenso / Pasional" onclick="setFilter('intensity', 'Intenso / Pasional')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-rosegold-400/20 bg-obsidian/50 text-rosegold-300/80 hover:border-rosegold-400/50 transition cursor-pointer">
+                                🔥 Intenso / Pasional
+                            </button>
+                            <button data-val="Aventurero / Acrobático" onclick="setFilter('intensity', 'Aventurero / Acrobático')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-rosegold-400/20 bg-obsidian/50 text-rosegold-300/80 hover:border-rosegold-400/50 transition cursor-pointer">
+                                ⚡ Aventurero
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filtro Lugar -->
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-rosegold-400 font-semibold mb-2.5">
+                            Lugar / Escenario
+                        </label>
+                        <div class="flex flex-wrap gap-2" id="filter-location">
+                            <button data-val="all" onclick="setFilter('location', 'all')" class="filter-btn active px-3 py-1.5 rounded-xl text-xs font-medium border transition cursor-pointer bg-rosegold-600/30 border-rosegold-400 text-white">
+                                Cualquier lugar
+                            </button>
+                            <button data-val="Cama" onclick="setFilter('location', 'Cama')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-rosegold-400/20 bg-obsidian/50 text-rosegold-300/80 hover:border-rosegold-400/50 transition cursor-pointer">
+                                🛏️ Cama
+                            </button>
+                            <button data-val="Sofá / Silla" onclick="setFilter('location', 'Sofá / Silla')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-rosegold-400/20 bg-obsidian/50 text-rosegold-300/80 hover:border-rosegold-400/50 transition cursor-pointer">
+                                🛋️ Sofá / Silla
+                            </button>
+                            <button data-val="De pie / Ducha" onclick="setFilter('location', 'De pie / Ducha')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-medium border border-rosegold-400/20 bg-obsidian/50 text-rosegold-300/80 hover:border-rosegold-400/50 transition cursor-pointer">
+                                🚿 De pie / Ducha
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Barra inferior del panel: Contador y Toggle Evitar Repetidas -->
+                <div class="mt-5 pt-4 border-t border-rosegold-400/15 flex flex-wrap items-center justify-between gap-3">
+                    <div class="text-xs text-rosegold-300/80">
+                        Posiciones disponibles: <span id="filtered-count" class="font-bold text-rosegold-300">24</span>
+                    </div>
+
+                    <label class="inline-flex items-center gap-2.5 cursor-pointer select-none">
+                        <input type="checkbox" id="toggle-no-repeat" checked class="sr-only peer">
+                        <div class="w-9 h-5 bg-obsidian border border-rosegold-400/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-rosegold-300 after:rounded-full after:h-4 after:w-4 after:transition-all relative peer-checked:bg-rosegold-600"></div>
+                        <span class="text-xs font-medium text-rosegold-200">Evitar repetidas en esta sesión</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Visor de Barajado / Ruleta Visual -->
+            <div class="w-full max-w-md mb-6">
+                <div id="roulette-ticker" class="glass-card rounded-2xl p-4 text-center border border-rosegold-400/30 relative overflow-hidden">
+                    <div class="text-[11px] uppercase tracking-[0.2em] text-rosegold-400/80 mb-1">Selector Aleatorio</div>
+                    <div id="ticker-display" class="font-serif text-2xl sm:text-3xl font-semibold text-white truncate transition-all">
+                        ¿Listos para jugar?
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón Principal Sorpréndenos -->
+            <button id="btn-spin-roulette" onclick="spinRoulette()" class="btn-sensual px-10 py-4 rounded-full text-white font-semibold tracking-wider text-base sm:text-lg flex items-center gap-3 mb-8 cursor-pointer">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span>Sorpréndenos</span>
+            </button>
+
+            <!-- Tarjeta de Resultado Detallada -->
+            <div id="full-result-container" class="w-full max-w-2xl"></div>
+        </section>
+
+    </main>
+
+    <!-- Footer sutil -->
+    <footer class="w-full py-5 text-center text-xs text-rosegold-400/50 border-t border-rosegold-400/10 mt-auto">
+        Diseñado para conectar, explorar y disfrutar en pareja • Privacidad 100% local en tu navegador
+    </footer>
+
+    <!-- ========================================================= -->
+    <!-- MODAL: PERSONALIZAR CARAS DEL DADO 3D                     -->
+    <!-- ========================================================= -->
+    <div id="modal-dice-editor" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="glass-card w-full max-w-lg rounded-3xl p-6 max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between pb-4 border-b border-rosegold-400/15">
+                <div>
+                    <h3 class="font-serif text-2xl font-semibold text-white">Personalizar Dado 3D</h3>
+                    <p class="text-xs text-rosegold-300/70">Elige qué posición aparece en cada una de las 6 caras.</p>
+                </div>
+                <button onclick="closeDiceEditor()" class="p-2 rounded-full hover:bg-white/10 text-rosegold-300 transition">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="dice-faces-form" class="py-4 space-y-3 overflow-y-auto flex-1 pr-1">
+                <!-- Se llena dinámicamente con selects -->
+            </div>
+
+            <div class="pt-4 border-t border-rosegold-400/15 flex items-center justify-between gap-3">
+                <button onclick="randomizeDiceFaces()" class="px-4 py-2.5 rounded-xl bg-velvet hover:bg-burgundy-800 border border-rosegold-400/25 text-xs font-medium text-rosegold-300 transition">
+                    🎲 Aleatorizar Caras
+                </button>
+                <button onclick="saveDiceFaces()" class="btn-sensual px-6 py-2.5 rounded-xl text-sm font-semibold text-white">
+                    Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- DRAWER LATERAL: FAVORITOS E HISTORIAL                     -->
+    <!-- ========================================================= -->
+    <div id="drawer-backdrop" onclick="closeDrawer()" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm transition-opacity"></div>
+    <aside id="side-drawer" class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-velvet border-l border-rosegold-400/20 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-5 border-b border-rosegold-400/15 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <h3 id="drawer-title" class="font-serif text-2xl font-semibold text-white">Favoritos</h3>
+            </div>
+            <button onclick="closeDrawer()" class="p-2 rounded-full hover:bg-white/10 text-rosegold-300 transition">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Tabs internos del drawer -->
+        <div class="px-5 pt-3 flex gap-2 border-b border-rosegold-400/10">
+            <button id="drawer-tab-fav" onclick="switchDrawerTab('favorites')" class="pb-2.5 px-2 text-sm font-medium border-b-2 border-rosegold-400 text-white">
+                Favoritos Guardados
+            </button>
+            <button id="drawer-tab-hist" onclick="switchDrawerTab('history')" class="pb-2.5 px-2 text-sm font-medium border-b-2 border-transparent text-rosegold-300/60 hover:text-white">
+                Historial de Sesión
+            </button>
+        </div>
+
+        <div id="drawer-content" class="p-5 flex-1 overflow-y-auto space-y-3">
+            <!-- Lista dinámica -->
+        </div>
+
+        <div id="drawer-footer" class="p-4 border-t border-rosegold-400/15 hidden">
+            <button onclick="clearSessionHistory()" class="w-full py-2.5 rounded-xl bg-obsidian hover:bg-burgundy-900 border border-rosegold-400/20 text-xs text-rosegold-300 transition">
+                Limpiar historial de sesión
+            </button>
+        </div>
+    </aside>
+
+    <!-- ========================================================= -->
+    <!-- LÓGICA DE LA APLICACIÓN                                   -->
+    <!-- ========================================================= -->
+    <script>
+        /**
+         * 1. MOTOR DE AUDIO SINTETIZADO (Web Audio API)
+         * Genera tonos suaves y armónicos sin archivos externos.
+         */
+        class SoundEngine {
+            constructor() {
+                this.enabled = true;
+                this.ctx = null;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) this.ctx = new AudioContext();
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            playTick(pitch = 320) {
+                if (!this.enabled) return;
+                try {
+                    this.init();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(pitch, this.ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(pitch * 0.6, this.ctx.currentTime + 0.06);
+
+                    gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.06);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + 0.065);
+                } catch (e) {}
+            }
+
+            playDiceBounce() {
+                if (!this.enabled) return;
+                const delays = [0, 0.18, 0.38, 0.62, 0.9, 1.25];
+                delays.forEach((d, idx) => {
+                    setTimeout(() => this.playTick(220 + idx * 35), d * 1000);
+                });
+            }
+
+            playReveal() {
+                if (!this.enabled) return;
+                try {
+                    this.init();
+                    // Acorde sensual cálido (Fa mayor 7 / La menor)
+                    const freqs = [261.63, 329.63, 392.00, 493.88];
+                    freqs.forEach((f, i) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(f, this.ctx.currentTime + i * 0.06);
+
+                        gain.gain.setValueAtTime(0.001, this.ctx.currentTime + i * 0.06);
+                        gain.gain.linearRampToValueAtTime(0.07, this.ctx.currentTime + i * 0.06 + 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.0008, this.ctx.currentTime + i * 0.06 + 1.1);
+
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(this.ctx.currentTime + i * 0.06);
+                        osc.stop(this.ctx.currentTime + i * 0.06 + 1.15);
+                    });
+                } catch (e) {}
+            }
+
+            playTimerEnd() {
+                if (!this.enabled) return;
+                this.playReveal();
+                setTimeout(() => this.playReveal(), 500);
+            }
+        }
+
+        const sound = new SoundEngine();
+
+        /**
+         * 2. ILUSTRACIONES VECTORIALES MINIMALISTAS (Siluetas artísticas elegantes)
+         * Representan cada postura de manera sutil, abstracta y estética.
+         */
+        const ILLUSTRATIONS = {
+            missionary: `<svg viewBox="0 0 120 80" class="w-full h-full stroke-rosegold-300 fill-none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 65 H105" stroke-opacity="0.3"/>
+                <circle cx="32" cy="52" r="6"/>
+                <path d="M38 56 Q60 62 92 58"/>
+                <circle cx="38" cy="36" r="6" class="stroke-rosegold-400"/>
+                <path d="M44 40 Q65 44 95 52" class="stroke-rosegold-400"/>
+                <path d="M52 44 L46 56" class="stroke-rosegold-400"/>
+            </svg>`,
+            cowgirl: `<svg viewBox="0 0 120 80" class="w-full h-full stroke-rosegold-300 fill-none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 66 H105" stroke-opacity="0.3"/>
+                <circle cx="28" cy="54" r="6"/>
+                <path d="M34 58 H95"/>
+                <circle cx="62" cy="22" r="6" class="stroke-rosegold-400"/>
+                <path d="M62 28 Q60 42 62 54" class="stroke-rosegold-400"/>
+                <path d="M62 45 L48 58 M62 45 L74 58" class="stroke-rosegold-400"/>
+            </svg>`,
+            doggy: `<svg viewBox="0 0 120 80" class="w-full h-full stroke-rosegold-300 fill-none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 66 H105" stroke-opacity="0.3"/>
+                <circle cx="34" cy="42" r="5.5"/>
+                <path d="M39 45 Q55 42 70 46 L66 64 M42 46 L38 64"/>
+                <circle cx="76" cy="26" r="5.5" class="stroke-rosegold-400"/>
+                <path d="M75 32 Q74 44 74 52 L72 64" class="stroke-rosegold-400"/>
+            </svg>`,
+            spooning: `<svg viewBox="0 0 120 80" class="w-full h-full stroke-rosegold-300 fill-none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 64 H105" stroke-opacity="0.3"/>
+                <circle cx="34" cy="48" r="5.5"/>
+                <path d="M40 50 Q62 48 76 54 L94 52"/>
+                <circle cx="44" cy="40" r="5.5" class="stroke-rosegold-400"/>
+                <path d="M50 42 Q70 40 82 48 L98 46" class="stroke-rosegold-400"/>
+            </svg>`,
+            lotus: `<svg viewBox="0 0 120 80" class="w-full h-full stroke-rosegold-300 fill-none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 66 H100" stroke-opacity="0.3"/>
+                <circle cx="48" cy="26" r="5.5"/>
+                <path d="M48 32 Q46 48 48 60 L66 62"/>
+                <circle cx="72" cy="26" r="5.5" class="stroke-rosegold-400"/>
+                <path d="M72 32 Q74 48 72 60 L54 62" class="stroke-rosegold-400"/>
+                <path d="M50 38 Q60 42 70 38" stroke-dasharray="2 2"/>
+            </svg>`,
+            standing: `<svg viewBox="0 0 120 80" class="w-full h-full stroke-rosegold-300 fill-none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M35 72 H85" stroke-opacity="0.3"/>
+                <circle cx="52" cy="18" r="5"/>
+                <path d="M52 24 V48 L48 70 M52 48 L56 70"/>
+                <circle cx="68" cy="22" r="5" class="stroke-rosegold-400"/>
+                <path d="M68 28 Q66 40 66 48 L66 70" class="stroke-rosegold-400"/>
+            </svg>`,
+            chair: `<svg viewBox="0 0 120 80" class="w-full h-full stroke-rosegold-300 fill-none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M35 28 V68 M35 50 H65 V68" stroke-opacity="0.35"/>
+                <circle cx="46" cy="24" r="5"/>
+                <path d="M46 30 V48 H64 L66 66"/>
+                <circle cx="64" cy="22" r="5" class="stroke-rosegold-400"/>
+                <path d="M64 28 Q62 40 60 48 L48 56" class="stroke-rosegold-400"/>
+            </svg>`,
+            bridge: `<svg viewBox="0 0 120 80" class="w-full h-full stroke-rosegold-300 fill-none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 66 H105" stroke-opacity="0.3"/>
+                <circle cx="30" cy="54" r="5"/>
+                <path d="M35 56 Q55 34 75 56 L82 65"/>
+                <circle cx="72" cy="26" r="5" class="stroke-rosegold-400"/>
+                <path d="M70 32 L62 46 L65 65" class="stroke-rosegold-400"/>
+            </svg>`
+        };
+
+        /**
+         * 3. CATÁLOGO COMPLETO DE 24 POSICIONES
+         */
+        const POSITIONS = [
+            {
+                id: 'misionero-clasico',
+                name: 'El Abrazo Clásico',
+                intensity: 'Suave / Romántico',
+                location: 'Cama',
+                intimacy: 'Muy Alta',
+                effort: 'Bajo',
+                illustration: 'missionary',
+                description: 'Uno recostado boca arriba mientras el otro se sitúa encima cara a cara, permitiendo un contacto visual constante, besos profundos y caricias en todo el cuerpo.',
+                tip: 'Coloca una almohada firme bajo las caderas de quien está abajo para cambiar el ángulo y aumentar la profundidad sin esfuerzo.'
+            },
+            {
+                id: 'cucharita-intima',
+                name: 'La Cucharita Íntima',
+                intensity: 'Suave / Romántico',
+                location: 'Cama',
+                intimacy: 'Muy Alta',
+                effort: 'Bajo',
+                illustration: 'spooning',
+                description: 'Ambos recostados de lado mirando hacia la misma dirección. Permite un ritmo pausado, sensual y manos libres para acariciar el cuello, pecho y caderas.',
+                tip: 'Ideal para mañanas perezosas o encuentros largos. Entrelazar las manos añade una conexión emocional intensa.'
+            },
+            {
+                id: 'flor-de-loto',
+                name: 'La Flor de Loto',
+                intensity: 'Suave / Romántico',
+                location: 'Cama',
+                intimacy: 'Extrema',
+                effort: 'Medio',
+                illustration: 'lotus',
+                description: 'Uno se sienta con las piernas cruzadas y el otro se sienta en su regazo enfrentado, rodeando su cintura con las piernas y abrazando su espalda.',
+                tip: 'Sincronizar la respiración mirando a los ojos convierte esta postura en una experiencia casi tántrica.'
+            },
+            {
+                id: 'la-amazona',
+                name: 'La Amazona',
+                intensity: 'Intenso / Pasional',
+                location: 'Cama',
+                intimacy: 'Alta',
+                effort: 'Medio',
+                illustration: 'cowgirl',
+                description: 'Quien está encima toma el control total del ritmo, la profundidad y el ángulo, mientras quien está debajo disfruta de una vista privilegiada y manos libres.',
+                tip: 'Inclinarse ligeramente hacia adelante permite combinar un ritmo intenso con besos en el cuello y pecho.'
+            },
+            {
+                id: 'amazona-invertida',
+                name: 'Amazona Invertida',
+                intensity: 'Intenso / Pasional',
+                location: 'Cama',
+                intimacy: 'Media',
+                effort: 'Medio',
+                illustration: 'cowgirl',
+                description: 'Similar a la amazona tradicional, pero mirando hacia los pies de la pareja. Ofrece un ángulo completamente diferente y gran estimulación visual.',
+                tip: 'Apoyar las manos sobre las rodillas o muslos de la pareja proporciona un punto de apoyo excelente para marcar el ritmo.'
+            },
+            {
+                id: 'el-conquistador',
+                name: 'El Conquistador',
+                intensity: 'Intenso / Pasional',
+                location: 'Cama',
+                intimacy: 'Media',
+                effort: 'Medio',
+                illustration: 'doggy',
+                description: 'De rodillas sobre la cama, uno se apoya sobre sus manos o antebrazos mientras el otro se sitúa detrás sujetando sus caderas.',
+                tip: 'Bajar el torso apoyando el pecho sobre una almohada arquea la espalda y cambia por completo la sensación.'
+            },
+            {
+                id: 'borde-del-placer',
+                name: 'Al Borde del Placer',
+                intensity: 'Intenso / Pasional',
+                location: 'Cama',
+                intimacy: 'Alta',
+                effort: 'Medio',
+                illustration: 'standing',
+                description: 'Uno se recuesta al borde de la cama con las piernas abiertas o sobre los hombros del otro, que permanece de pie junto al colchón.',
+                tip: 'Asegúrate de que la altura de la cama sea cómoda; un par de cojines bajo la pelvis ajustan el nivel al milímetro.'
+            },
+            {
+                id: 'mariposa-nocturna',
+                name: 'Mariposa Nocturna',
+                intensity: 'Aventurero / Acrobático',
+                location: 'Cama',
+                intimacy: 'Alta',
+                effort: 'Alto',
+                illustration: 'bridge',
+                description: 'Recostado boca arriba al filo de la cama, eleva las caderas apoyando los pies sobre los hombros de quien está de pie, logrando una inclinación profunda.',
+                tip: 'Mantén un ritmo constante y comunica el nivel de profundidad deseado para que ambos estéis cómodos.'
+            },
+            {
+                id: 'el-trono-del-sofa',
+                name: 'El Trono del Sofá',
+                intensity: 'Suave / Romántico',
+                location: 'Sofá / Silla',
+                intimacy: 'Muy Alta',
+                effort: 'Bajo',
+                illustration: 'chair',
+                description: 'Sentado cómodamente en el sofá o en un sillón amplio, tu pareja se sienta encima de ti frente a frente, apoyando sus pies en el asiento o el suelo.',
+                tip: 'El respaldo del sofá ofrece un soporte perfecto para reclinaros y jugar con movimientos circulares de cadera.'
+            },
+            {
+                id: 'silla-invertida',
+                name: 'Silla Invertida',
+                intensity: 'Intenso / Pasional',
+                location: 'Sofá / Silla',
+                intimacy: 'Media',
+                effort: 'Medio',
+                illustration: 'chair',
+                description: 'Sentado en una silla firme sin reposabrazos, tu pareja se sienta encima mirando hacia adelante, sujetándose de tus rodillas o del borde.',
+                tip: 'Quien está sentado detrás puede abrazar el torso de su pareja y acariciar libremente mientras marca el compás.'
+            },
+            {
+                id: 'abrazo-vertical',
+                name: 'Abrazo Vertical',
+                intensity: 'Intenso / Pasional',
+                location: 'De pie / Ducha',
+                intimacy: 'Alta',
+                effort: 'Alto',
+                illustration: 'standing',
+                description: 'De pie cara a cara, uno apoya la espalda contra la pared o mampara mientras eleva una pierna rodeando la cintura de su pareja.',
+                tip: 'En la ducha, colocad una alfombrilla antideslizante y dejad que el agua tibia caiga sobre los hombros para mayor sensualidad.'
+            },
+            {
+                id: 'reflejo-en-la-pared',
+                name: 'Reflejo en la Pared',
+                intensity: 'Intenso / Pasional',
+                location: 'De pie / Ducha',
+                intimacy: 'Media',
+                effort: 'Medio',
+                illustration: 'standing',
+                description: 'De pie mirando hacia la pared o el cristal de la ducha, apoyando las palmas de las manos para mantener el equilibrio mientras el otro se acerca por detrás.',
+                tip: 'Flexionar ligeramente las rodillas permite igualar estaturas y conseguir un encaje natural y fluido.'
+            },
+            {
+                id: 'la-cascada',
+                name: 'La Cascada',
+                intensity: 'Aventurero / Acrobático',
+                location: 'Cama',
+                intimacy: 'Media',
+                effort: 'Alto',
+                illustration: 'bridge',
+                description: 'Quien está debajo eleva la pelvis formando un suave puente apoyando los pies y hombros en el colchón, mientras el otro se arrodilla entre sus piernas.',
+                tip: 'No hace falta mantener el puente todo el tiempo; alterna momentos de elevación con descansos sobre un cojín.'
+            },
+            {
+                id: 'tijeras-entrelazadas',
+                name: 'Tijeras Entrelazadas',
+                intensity: 'Suave / Romántico',
+                location: 'Cama',
+                intimacy: 'Alta',
+                effort: 'Bajo',
+                illustration: 'spooning',
+                description: 'Recostados de lado frente a frente, entrelazando las piernas como una tijera. Permite caricias suaves y un ritmo íntimo y pausado.',
+                tip: 'Ideal para sesiones largas donde la prioridad es el roce piel con piel y la complicidad.'
+            },
+            {
+                id: 'el-arco-sensual',
+                name: 'El Arco Sensual',
+                intensity: 'Intenso / Pasional',
+                location: 'Cama',
+                intimacy: 'Alta',
+                effort: 'Medio',
+                illustration: 'missionary',
+                description: 'Variante del clásico donde quien está debajo lleva las rodillas hacia el pecho, permitiendo un ángulo más cerrado e intenso.',
+                tip: 'Sujetar los tobillos o pantorrillas suavemente añade un toque de pasión sin resultar incómodo.'
+            },
+            {
+                id: 'la-bailarina',
+                name: 'La Bailarina',
+                intensity: 'Aventurero / Acrobático',
+                location: 'De pie / Ducha',
+                intimacy: 'Alta',
+                effort: 'Alto',
+                illustration: 'standing',
+                description: 'De pie frente a frente, uno sostiene la pierna levantada de su pareja a la altura de la cadera mientras ambos se abrazan por los hombros.',
+                tip: 'Apoyarse de lado contra el marco de una puerta o una pared cercana da estabilidad total para disfrutar sin cansarse.'
+            },
+            {
+                id: 'susurro-en-el-sofa',
+                name: 'Susurro en el Sofá',
+                intensity: 'Suave / Romántico',
+                location: 'Sofá / Silla',
+                intimacy: 'Alta',
+                effort: 'Bajo',
+                illustration: 'spooning',
+                description: 'Tumbados juntos a lo largo del sofá estrecho, uno ligeramente delante del otro, aprovechando la cercanía obligada del espacio.',
+                tip: 'Los susurros al oído y las caricias en el cuello multiplican la intensidad en esta postura.'
+            },
+            {
+                id: 'el-desliz',
+                name: 'El Desliz',
+                intensity: 'Suave / Romántico',
+                location: 'Cama',
+                intimacy: 'Alta',
+                effort: 'Bajo',
+                illustration: 'missionary',
+                description: 'Ambos tumbados boca abajo / encima con las piernas estiradas y juntas, generando un contacto completo de todo el cuerpo de pies a cabeza.',
+                tip: 'Los movimientos cortos y rítmicos de cadera crean una fricción muy placentera y envolvente.'
+            },
+            {
+                id: 'la-esfinge',
+                name: 'La Esfinge',
+                intensity: 'Intenso / Pasional',
+                location: 'Cama',
+                intimacy: 'Media',
+                effort: 'Medio',
+                illustration: 'doggy',
+                description: 'Tumbado completamente boca abajo sobre el colchón con una almohada bajo el abdomen, mientras tu pareja se sitúa encima siguiendo la línea de tu cuerpo.',
+                tip: 'Cerrar ligeramente las piernas aumenta la sensación de cercanía y contacto.'
+            },
+            {
+                id: 'suspension-apasionada',
+                name: 'Suspensión Apasionada',
+                intensity: 'Aventurero / Acrobático',
+                location: 'De pie / Ducha',
+                intimacy: 'Muy Alta',
+                effort: 'Alto',
+                illustration: 'standing',
+                description: 'Apoyando la espalda contra una pared firme, uno rodea con ambas piernas la cintura de su pareja mientras se sostienen mutuamente.',
+                tip: 'Recomendada para momentos espontáneos de alta pasión; mantenedla durante un par de minutos intensos.'
+            },
+            {
+                id: 'sofa-en-angulo',
+                name: 'Sofá en Ángulo',
+                intensity: 'Intenso / Pasional',
+                location: 'Sofá / Silla',
+                intimacy: 'Media',
+                effort: 'Medio',
+                illustration: 'chair',
+                description: 'Uno se recuesta sobre el asiento del sofá apoyando la espalda en el reposabrazos, mientras el otro se arrodilla entre sus piernas.',
+                tip: 'Usa los cojines del sofá para elevar ligeramente la zona lumbar y encontrar el ángulo perfecto.'
+            },
+            {
+                id: 'la-carretilla-suave',
+                name: 'Equilibrio en el Borde',
+                intensity: 'Aventurero / Acrobático',
+                location: 'Cama',
+                intimacy: 'Media',
+                effort: 'Alto',
+                illustration: 'doggy',
+                description: 'Uno apoya las palmas de las manos en el suelo o en un puf frente a la cama mientras sus piernas descansan sobre el colchón y su pareja lo sostiene de pie.',
+                tip: 'Aseguraos de que el apoyo de las manos sea cómodo colocando un cojín o alfombra mullida en el suelo.'
+            },
+            {
+                id: 'el-perezoso',
+                name: 'El Perezoso',
+                intensity: 'Suave / Romántico',
+                location: 'Cama',
+                intimacy: 'Alta',
+                effort: 'Bajo',
+                illustration: 'cowgirl',
+                description: 'Uno recostado boca arriba y el otro encima, pero en lugar de incorporarse, se recuesta suavemente sobre el pecho de su pareja.',
+                tip: 'Permite descansar sin perder el contacto, ideal para alternar momentos suaves con otros más intensos.'
+            },
+            {
+                id: 'ducha-envolvente',
+                name: 'Ducha Envolvente',
+                intensity: 'Suave / Romántico',
+                location: 'De pie / Ducha',
+                intimacy: 'Muy Alta',
+                effort: 'Medio',
+                illustration: 'standing',
+                description: 'De pie bajo el agua caliente, abrazados pecho con pecho, moviéndose al compás del agua con caricias jabonosas por toda la espalda.',
+                tip: 'Usad gel de baño aromático o aceite corporal apto para agua para que el deslizamiento sea aún más sensual.'
+            }
+        ];
+
+        /**
+         * 4. ESTADO GLOBAL DE LA APLICACIÓN
+         */
+        let state = {
+            mode: 'dice', // 'dice' | 'full'
+            // IDs de las 6 posiciones asignadas actualmente a las caras del dado
+            diceFaces: [
+                'misionero-clasico',
+                'la-amazona',
+                'el-conquistador',
+                'cucharita-intima',
+                'flor-de-loto',
+                'borde-del-placer'
+            ],
+            isRolling: false,
+            currentRotation: { x: -18, y: 28 },
+            filters: {
+                intensity: 'all',
+                location: 'all'
+            },
+            favorites: JSON.parse(localStorage.getItem('lamour_favorites') || '[]'),
+            history: [], // IDs vistos en la sesión actual
+            activeTimer: null,
+            timerSecondsLeft: 0,
+            timerTotalSeconds: 0,
+            drawerTab: 'favorites'
+        };
+
+        /**
+         * 5. INICIALIZACIÓN Y RENDERIZADO DEL DADO 3D
+         */
+        function initApp() {
+            // Cargar caras personalizadas del dado si existen en localStorage
+            const savedDice = localStorage.getItem('lamour_dice_faces');
+            if (savedDice) {
+                try {
+                    const parsed = JSON.parse(savedDice);
+                    if (Array.isArray(parsed) && parsed.length === 6) {
+                        state.diceFaces = parsed;
+                    }
+                } catch (e) {}
+            }
+
+            renderDiceFaces();
+            updateFavBadge();
+            updateFilteredCount();
+        }
+
+        function getPositionById(id) {
+            return POSITIONS.find(p => p.id === id) || POSITIONS[0];
+        }
+
+        function renderDiceFaces() {
+            state.diceFaces.forEach((posId, index) => {
+                const pos = getPositionById(posId);
+                const faceEl = document.getElementById(`cube-face-${index}`);
+                if (!faceEl) return;
+
+                faceEl.innerHTML = `
+                    <span class="text-[10px] uppercase tracking-widest text-rosegold-400/70 mb-1">Cara ${index + 1}</span>
+                    <div class="w-24 h-16 my-1 flex items-center justify-center">
+                        ${ILLUSTRATIONS[pos.illustration] || ILLUSTRATIONS.missionary}
+                    </div>
+                    <h4 class="font-serif text-lg sm:text-xl font-semibold text-white leading-tight line-clamp-2 px-1">
+                        ${pos.name}
+                    </h4>
+                    <span class="mt-1.5 text-[10px] px-2 py-0.5 rounded-full bg-rosegold-500/15 text-rosegold-300 border border-rosegold-400/20">
+                        ${pos.intensity.split('/')[0].trim()}
+                    </span>
+                `;
+            });
+        }
+
+        /**
+         * 6. LÓGICA DE LANZAMIENTO DEL DADO 3D
+         */
+        // Rotaciones exactas para mostrar cada cara de frente
+        const FACE_TARGET_ROTATIONS = [
+            { x: 0, y: 0 },     // Cara 1 (front)
+            { x: 0, y: -90 },   // Cara 2 (right)
+            { x: 0, y: -180 },  // Cara 3 (back)
+            { x: 0, y: 90 },    // Cara 4 (left)
+            { x: -90, y: 0 },   // Cara 5 (top)
+            { x: 90, y: 0 }     // Cara 6 (bottom)
+        ];
+
+        function rollDice() {
+            if (state.isRolling) return;
+            state.isRolling = true;
+            stopTimer();
+
+            const btn = document.getElementById('btn-roll-dice');
+            btn.disabled = true;
+            btn.classList.add('opacity-70');
+
+            sound.playDiceBounce();
+
+            // Elegir cara aleatoria (0 a 5)
+            const targetIndex = Math.floor(Math.random() * 6);
+            const targetBase = FACE_TARGET_ROTATIONS[targetIndex];
+
+            // Añadir múltiples vueltas completas (720° o 1080°) para efecto físico realista
+            const extraSpinsX = (Math.floor(Math.random() * 2) + 2) * 360;
+            const extraSpinsY = (Math.floor(Math.random() * 2) + 2) * 360;
+
+            // Calcular rotación acumulada manteniendo alineación exacta al final
+            const currentModX = state.currentRotation.x % 360;
+            const currentModY = state.currentRotation.y % 360;
+
+            const nextX = state.currentRotation.x - currentModX + extraSpinsX + targetBase.x;
+            const nextY = state.currentRotation.y - currentModY + extraSpinsY + targetBase.y;
+
+            state.currentRotation = { x: nextX, y: nextY };
+
+            const cube = document.getElementById('dice-cube');
+            cube.style.transform = `rotateX(${nextX}deg) rotateY(${nextY}deg)`;
+
+            // Esperar a que termine la animación CSS (2.2s)
+            setTimeout(() => {
+                state.isRolling = false;
+                btn.disabled = false;
+                btn.classList.remove('opacity-70');
+
+                const selectedPos = getPositionById(state.diceFaces[targetIndex]);
+                addToHistory(selectedPos.id);
+                sound.playReveal();
+                renderResultCard(selectedPos, 'dice-result-container');
+            }, 2250);
+        }
+
+        /**
+         * 7. EDITOR DE CARAS DEL DADO 3D
+         */
+        function openDiceEditor() {
+            const modal = document.getElementById('modal-dice-editor');
+            const form = document.getElementById('dice-faces-form');
+
+            form.innerHTML = state.diceFaces.map((selectedId, idx) => `
+                <div class="flex items-center justify-between gap-3 bg-obsidian/60 p-3 rounded-2xl border border-rosegold-400/15">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-rosegold-400 whitespace-nowrap">
+                        Cara ${idx + 1}
+                    </span>
+                    <select id="select-face-${idx}" class="w-full max-w-[260px] bg-velvet text-white text-sm rounded-xl px-3 py-2 border border-rosegold-400/25 focus:outline-none focus:border-rosegold-400">
+                        ${POSITIONS.map(p => `
+                            <option value="${p.id}" ${p.id === selectedId ? 'selected' : ''}>
+                                ${p.name} (${p.intensity.split('/')[0].trim()})
+                            </option>
+                        `).join('')}
+                    </select>
+                </div>
+            `).join('');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeDiceEditor() {
+            const modal = document.getElementById('modal-dice-editor');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function randomizeDiceFaces() {
+            const shuffled = [...POSITIONS].sort(() => 0.5 - Math.random()).slice(0, 6);
+            shuffled.forEach((pos, idx) => {
+                const select = document.getElementById(`select-face-${idx}`);
+                if (select) select.value = pos.id;
+            });
+            sound.playTick(440);
+        }
+
+        function saveDiceFaces() {
+            const newFaces = [];
+            for (let i = 0; i < 6; i++) {
+                const select = document.getElementById(`select-face-${i}`);
+                newFaces.push(select.value);
+            }
+            state.diceFaces = newFaces;
+            localStorage.setItem('lamour_dice_faces', JSON.stringify(newFaces));
+            renderDiceFaces();
+            closeDiceEditor();
+            showToast('Caras del dado actualizadas ✨');
+        }
+
+        /**
+         * 8. LÓGICA DEL SELECTOR AVANZADO (VERSIÓN COMPLETA)
+         */
+        function setFilter(type, value) {
+            state.filters[type] = value;
+            sound.playTick(360);
+
+            // Actualizar estilos visuales de botones
+            const container = document.getElementById(`filter-${type}`);
+            container.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.val === value) {
+                    btn.classList.add('bg-rosegold-600/30', 'border-rosegold-400', 'text-white');
+                    btn.classList.remove('bg-obsidian/50', 'border-rosegold-400/20', 'text-rosegold-300/80');
+                } else {
+                    btn.classList.remove('bg-rosegold-600/30', 'border-rosegold-400', 'text-white');
+                    btn.classList.add('bg-obsidian/50', 'border-rosegold-400/20', 'text-rosegold-300/80');
+                }
+            });
+
+            updateFilteredCount();
+        }
+
+        function getFilteredPositions() {
+            return POSITIONS.filter(p => {
+                const matchIntensity = state.filters.intensity === 'all' || p.intensity === state.filters.intensity;
+                const matchLocation = state.filters.location === 'all' || p.location === state.filters.location;
+                return matchIntensity && matchLocation;
+            });
+        }
+
+        function updateFilteredCount() {
+            const list = getFilteredPositions();
+            document.getElementById('filtered-count').textContent = list.length;
+        }
+
+        function spinRoulette() {
+            if (state.isRolling) return;
+
+            let pool = getFilteredPositions();
+            if (pool.length === 0) {
+                showToast('No hay posiciones con esa combinación de filtros.');
+                return;
+            }
+
+            // Comprobar opción "Evitar repetidas"
+            const avoidRepeat = document.getElementById('toggle-no-repeat').checked;
+            if (avoidRepeat) {
+                const unplayed = pool.filter(p => !state.history.includes(p.id));
+                if (unplayed.length === 0) {
+                    showToast('¡Ya habéis probado todas las de este filtro! Reiniciando ciclo...');
+                    // Limpiar del historial solo las de este filtro
+                    const poolIds = pool.map(p => p.id);
+                    state.history = state.history.filter(id => !poolIds.includes(id));
+                } else {
+                    pool = unplayed;
+                }
+            }
+
+            state.isRolling = true;
+            stopTimer();
+
+            const btn = document.getElementById('btn-spin-roulette');
+            btn.disabled = true;
+            btn.classList.add('opacity-70');
+
+            const ticker = document.getElementById('ticker-display');
+            const finalChoice = pool[Math.floor(Math.random() * pool.length)];
+
+            // Animación de desaceleración progresiva
+            let steps = 0;
+            const totalSteps = 22;
+            let delay = 55;
+
+            function nextStep() {
+                steps++;
+                const randomPreview = pool[Math.floor(Math.random() * pool.length)];
+                ticker.textContent = steps === totalSteps ? finalChoice.name : randomPreview.name;
+                ticker.classList.toggle('scale-105');
+                sound.playTick(280 + steps * 10);
+
+                if (steps < totalSteps) {
+                    // Desacelerar al final
+                    if (steps > 14) delay += 35;
+                    else if (steps > 8) delay += 12;
+                    setTimeout(nextStep, delay);
+                } else {
+                    ticker.classList.remove('scale-105');
+                    ticker.classList.add('text-rosegold-300');
+                    setTimeout(() => ticker.classList.remove('text-rosegold-300'), 600);
+
+                    state.isRolling = false;
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-70');
+
+                    addToHistory(finalChoice.id);
+                    sound.playReveal();
+                    renderResultCard(finalChoice, 'full-result-container');
+                }
+            }
+
+            nextStep();
+        }
+
+        /**
+         * 9. TARJETA DE RESULTADO DETALLADA + TEMPORIZADOR INTEGRADO
+         */
+        function renderResultCard(pos, containerId) {
+            const container = document.getElementById(containerId);
+            const isFav = state.favorites.includes(pos.id);
+
+            container.innerHTML = `
+                <article class="glass-card rounded-3xl p-6 sm:p-8 animate-reveal relative overflow-hidden">
+                    <!-- Decoración sutil de esquina -->
+                    <div class="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-rosegold-500/10 blur-2xl pointer-events-none"></div>
+
+                    <!-- Cabecera: Etiquetas y Botón Favorito -->
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-rosegold-500/20 text-rosegold-300 border border-rosegold-400/30">
+                                ${pos.intensity}
+                            </span>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-obsidian/70 text-rosegold-200/90 border border-rosegold-400/20">
+                                📍 ${pos.location}
+                            </span>
+                        </div>
+
+                        <button onclick="toggleFavorite('${pos.id}', '${containerId}')" title="${isFav ? 'Quitar de favoritos' : 'Guardar en favoritos'}" class="p-2.5 rounded-full bg-obsidian/60 hover:bg-burgundy-800 border border-rosegold-400/25 transition cursor-pointer group">
+                            <svg class="w-5 h-5 transition-transform group-hover:scale-110 ${isFav ? 'text-rosegold-500 fill-rosegold-500' : 'text-rosegold-300 fill-none'}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Título e Ilustración Artística -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center my-4">
+                        <div class="sm:col-span-2">
+                            <h3 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-3">
+                                ${pos.name}
+                            </h3>
+                            <p class="text-sm sm:text-base text-rosegold-100/85 leading-relaxed">
+                                ${pos.description}
+                            </p>
+                        </div>
+
+                        <!-- Marco de Silueta Minimalista -->
+                        <div class="bg-obsidian/60 rounded-2xl p-4 border border-rosegold-400/20 flex flex-col items-center justify-center shadow-inner">
+                            <div class="w-32 h-24">
+                                ${ILLUSTRATIONS[pos.illustration] || ILLUSTRATIONS.missionary}
+                            </div>
+                            <span class="text-[10px] uppercase tracking-widest text-rosegold-400/60 mt-1">Silueta Guía</span>
+                        </div>
+                    </div>
+
+                    <!-- Indicadores de Intimidad y Esfuerzo -->
+                    <div class="grid grid-cols-2 gap-3 my-5">
+                        <div class="bg-obsidian/50 rounded-2xl p-3.5 border border-rosegold-400/15 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-rosegold-500/15 flex items-center justify-center text-rosegold-300">
+                                ✨
+                            </div>
+                            <div>
+                                <div class="text-[11px] uppercase tracking-wider text-rosegold-400/70">Intimidad</div>
+                                <div class="text-sm font-semibold text-white">${pos.intimacy}</div>
+                            </div>
+                        </div>
+                        <div class="bg-obsidian/50 rounded-2xl p-3.5 border border-rosegold-400/15 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-rosegold-500/15 flex items-center justify-center text-rosegold-300">
+                                ⚡
+                            </div>
+                            <div>
+                                <div class="text-[11px] uppercase tracking-wider text-rosegold-400/70">Esfuerzo Físico</div>
+                                <div class="text-sm font-semibold text-white">${pos.effort}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tip Extra -->
+                    <div class="bg-gradient-to-r from-burgundy-900/80 to-obsidian/80 rounded-2xl p-4 border-l-4 border-rosegold-400 mb-6">
+                        <div class="text-xs font-bold uppercase tracking-wider text-rosegold-300 mb-1 flex items-center gap-1.5">
+                            <span>💡 Consejo para mejorar la experiencia</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-rosegold-200/90 leading-relaxed">
+                            ${pos.tip}
+                        </p>
+                    </div>
+
+                    <!-- Temporizador Opcional de Juego -->
+                    <div class="pt-4 border-t border-rosegold-400/15 flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-rosegold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span class="text-xs font-medium text-rosegold-300">Reto de tiempo (opcional):</span>
+                        </div>
+
+                        <div id="timer-controls" class="flex flex-wrap items-center gap-2">
+                            <button onclick="startTimer(60)" class="px-3 py-1.5 rounded-xl bg-obsidian hover:bg-burgundy-800 border border-rosegold-400/25 text-xs text-rosegold-200 transition cursor-pointer">
+                                1 min
+                            </button>
+                            <button onclick="startTimer(180)" class="px-3 py-1.5 rounded-xl bg-obsidian hover:bg-burgundy-800 border border-rosegold-400/25 text-xs text-rosegold-200 transition cursor-pointer">
+                                3 min
+                            </button>
+                            <button onclick="startTimer(300)" class="px-3 py-1.5 rounded-xl bg-obsidian hover:bg-burgundy-800 border border-rosegold-400/25 text-xs text-rosegold-200 transition cursor-pointer">
+                                5 min
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }
+
+        /**
+         * 10. TEMPORIZADOR INTEGRADO EN LA TARJETA
+         */
+        function startTimer(seconds) {
+            stopTimer();
+            state.timerSecondsLeft = seconds;
+            state.timerTotalSeconds = seconds;
+            sound.playTick(420);
+
+            updateTimerUI();
+            state.activeTimer = setInterval(() => {
+                state.timerSecondsLeft--;
+                if (state.timerSecondsLeft <= 0) {
+                    stopTimer(true);
+                } else {
+                    updateTimerUI();
+                }
+            }, 1000);
+        }
+
+        function stopTimer(completed = false) {
+            if (state.activeTimer) {
+                clearInterval(state.activeTimer);
+                state.activeTimer = null;
+            }
+            const controls = document.getElementById('timer-controls');
+            if (!controls) return;
+
+            if (completed) {
+                sound.playTimerEnd();
+                showToast('⏰ ¡Tiempo cumplido! ¿Continuáis o giráis de nuevo?');
+            }
+
+            controls.innerHTML = `
+                <button onclick="startTimer(60)" class="px-3 py-1.5 rounded-xl bg-obsidian hover:bg-burgundy-800 border border-rosegold-400/25 text-xs text-rosegold-200 transition cursor-pointer">1 min</button>
+                <button onclick="startTimer(180)" class="px-3 py-1.5 rounded-xl bg-obsidian hover:bg-burgundy-800 border border-rosegold-400/25 text-xs text-rosegold-200 transition cursor-pointer">3 min</button>
+                <button onclick="startTimer(300)" class="px-3 py-1.5 rounded-xl bg-obsidian hover:bg-burgundy-800 border border-rosegold-400/25 text-xs text-rosegold-200 transition cursor-pointer">5 min</button>
+            `;
+        }
+
+        function updateTimerUI() {
+            const controls = document.getElementById('timer-controls');
+            if (!controls) return;
+
+            const mins = Math.floor(state.timerSecondsLeft / 60);
+            const secs = state.timerSecondsLeft % 60;
+            const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+            controls.innerHTML = `
+                <div class="flex items-center gap-3 bg-burgundy-900/90 px-4 py-1.5 rounded-xl border border-rosegold-400/40">
+                    <span class="font-mono text-sm font-bold text-rosegold-300 tracking-wider">${formatted}</span>
+                    <button onclick="stopTimer(false)" class="text-xs text-rosegold-400 hover:text-white underline cursor-pointer">
+                        Detener
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * 11. FAVORITOS, HISTORIAL Y NAVEGACIÓN
+         */
+        function switchMode(newMode) {
+            state.mode = newMode;
+            stopTimer();
+            sound.playTick(380);
+
+            const tabDice = document.getElementById('tab-dice');
+            const tabFull = document.getElementById('tab-full');
+            const viewDice = document.getElementById('view-dice');
+            const viewFull = document.getElementById('view-full');
+
+            if (newMode === 'dice') {
+                tabDice.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 bg-gradient-to-r from-rosegold-600 to-burgundy-800 text-white shadow';
+                tabFull.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 text-rosegold-300/70 hover:text-white';
+                viewDice.classList.remove('hidden');
+                viewDice.classList.add('flex');
+                viewFull.classList.add('hidden');
+                viewFull.classList.remove('flex');
+            } else {
+                tabFull.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 bg-gradient-to-r from-rosegold-600 to-burgundy-800 text-white shadow';
+                tabDice.className = 'flex-1 sm:flex-initial px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 text-rosegold-300/70 hover:text-white';
+                viewFull.classList.remove('hidden');
+                viewFull.classList.add('flex');
+                viewDice.classList.add('hidden');
+                viewDice.classList.remove('flex');
+            }
+        }
+
+        function toggleFavorite(posId, containerIdToRefresh = null) {
+            const index = state.favorites.indexOf(posId);
+            if (index === -1) {
+                state.favorites.push(posId);
+                showToast('Añadida a tus favoritos ❤️');
+                sound.playTick(520);
+            } else {
+                state.favorites.splice(index, 1);
+                showToast('Eliminada de favoritos');
+                sound.playTick(260);
+            }
+
+            localStorage.setItem('lamour_favorites', JSON.stringify(state.favorites));
+            updateFavBadge();
+
+            if (containerIdToRefresh) {
+                renderResultCard(getPositionById(posId), containerIdToRefresh);
+            }
+            if (!document.getElementById('side-drawer').classList.contains('translate-x-full')) {
+                renderDrawerContent();
+            }
+        }
+
+        function updateFavBadge() {
+            const badge = document.getElementById('fav-badge');
+            if (state.favorites.length > 0) {
+                badge.textContent = state.favorites.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function addToHistory(posId) {
+            state.history.unshift(posId);
+            // Mantener máximo 30 elementos recientes en sesión
+            if (state.history.length > 30) state.history.pop();
+        }
+
+        function clearSessionHistory() {
+            state.history = [];
+            renderDrawerContent();
+            showToast('Historial de sesión limpiado');
+        }
+
+        function openDrawer(tab) {
+            state.drawerTab = tab;
+            document.getElementById('drawer-backdrop').classList.remove('hidden');
+            document.getElementById('side-drawer').classList.remove('translate-x-full');
+            switchDrawerTab(tab);
+        }
+
+        function closeDrawer() {
+            document.getElementById('drawer-backdrop').classList.add('hidden');
+            document.getElementById('side-drawer').classList.add('translate-x-full');
+        }
+
+        function switchDrawerTab(tab) {
+            state.drawerTab = tab;
+            const tabFav = document.getElementById('drawer-tab-fav');
+            const tabHist = document.getElementById('drawer-tab-hist');
+            const title = document.getElementById('drawer-title');
+            const footer = document.getElementById('drawer-footer');
+
+            if (tab === 'favorites') {
+                title.textContent = 'Mis Favoritos';
+                tabFav.className = 'pb-2.5 px-2 text-sm font-medium border-b-2 border-rosegold-400 text-white';
+                tabHist.className = 'pb-2.5 px-2 text-sm font-medium border-b-2 border-transparent text-rosegold-300/60 hover:text-white';
+                footer.classList.add('hidden');
+            } else {
+                title.textContent = 'Historial de Sesión';
+                tabHist.className = 'pb-2.5 px-2 text-sm font-medium border-b-2 border-rosegold-400 text-white';
+                tabFav.className = 'pb-2.5 px-2 text-sm font-medium border-b-2 border-transparent text-rosegold-300/60 hover:text-white';
+                footer.classList.remove('hidden');
+            }
+
+            renderDrawerContent();
+        }
+
+        function renderDrawerContent() {
+            const container = document.getElementById('drawer-content');
+            const ids = state.drawerTab === 'favorites' ? state.favorites : state.history;
+
+            if (ids.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-rosegold-300/60 text-sm">
+                        ${state.drawerTab === 'favorites' 
+                            ? 'Aún no habéis guardado ninguna posición favorita.<br>Pulsa el corazón en cualquier tarjeta para guardarla.' 
+                            : 'Todavía no habéis girado el dado ni la ruleta en esta sesión.'}
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = ids.map(id => {
+                const pos = getPositionById(id);
+                return `
+                    <div class="bg-obsidian/70 rounded-2xl p-4 border border-rosegold-400/15 flex items-center justify-between gap-3 hover:border-rosegold-400/35 transition">
+                        <div class="cursor-pointer flex-1" onclick="inspectPositionFromDrawer('${pos.id}')">
+                            <h4 class="font-serif text-xl font-semibold text-white">${pos.name}</h4>
+                            <div class="text-xs text-rosegold-300/75 mt-0.5">
+                                ${pos.intensity} • ${pos.location}
+                            </div>
+                        </div>
+                        <button onclick="toggleFavorite('${pos.id}')" class="p-2 rounded-full hover:bg-white/5 text-rosegold-400">
+                            ${state.favorites.includes(pos.id) ? '❤️' : '🤍'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function inspectPositionFromDrawer(posId) {
+            closeDrawer();
+            const pos = getPositionById(posId);
+            const targetContainer = state.mode === 'dice' ? 'dice-result-container' : 'full-result-container';
+            renderResultCard(pos, targetContainer);
+        }
+
+        /**
+         * 12. UTILIDADES DE INTERFAZ (Sonido y Toasts)
+         */
+        function toggleSound() {
+            sound.enabled = !sound.enabled;
+            document.getElementById('icon-sound-on').classList.toggle('hidden', !sound.enabled);
+            document.getElementById('icon-sound-off').classList.toggle('hidden', sound.enabled);
+            if (sound.enabled) {
+                sound.playTick(440);
+                showToast('Sonidos activados 🔊');
+            } else {
+                showToast('Sonidos silenciados 🔇');
+            }
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'glass-card px-4 py-3 rounded-2xl text-xs sm:text-sm text-rosegold-200 border border-rosegold-400/30 shadow-xl animate-reveal';
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2800);
+        }
+
+        // Iniciar aplicación al cargar
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
